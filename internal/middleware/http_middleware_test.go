@@ -7,9 +7,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"github.com/nshekhawat/rate-limiter-go/internal/storage"
-	"github.com/stretchr/testify/assert"
 )
 
 func init() {

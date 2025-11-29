@@ -1,3 +1,4 @@
+// Package metrics provides observability instrumentation for the rate limiter service.
 package metrics
 
 import (

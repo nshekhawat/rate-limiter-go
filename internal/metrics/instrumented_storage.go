@@ -88,7 +88,7 @@ func NewInstrumentedAtomicStorage(s storage.AtomicStorage, backend string, m *Me
 }
 
 // CheckAndConsume atomically checks and consumes tokens with metrics.
-func (s *InstrumentedAtomicStorage) CheckAndConsume(ctx context.Context, key string, tokens int64, capacity int64, refillRate float64, ttl time.Duration) (*storage.ConsumeResult, error) {
+func (s *InstrumentedAtomicStorage) CheckAndConsume(ctx context.Context, key string, tokens, capacity int64, refillRate float64, ttl time.Duration) (*storage.ConsumeResult, error) {
 	start := time.Now()
 	result, err := s.atomicStorage.CheckAndConsume(ctx, key, tokens, capacity, refillRate, ttl)
 	s.metrics.RecordStorageOperation("check_and_consume", s.backend, time.Since(start).Seconds(), err)

@@ -1,3 +1,4 @@
+// Package client provides client libraries for interacting with the rate limiter service.
 package client
 
 import (
@@ -22,11 +23,11 @@ type Client interface {
 
 // Decision represents a rate limit decision.
 type Decision struct {
-	Allowed     bool
-	Limit       int64
-	Remaining   int64
-	ResetAt     time.Time
-	RetryAfter  time.Duration
+	Allowed    bool
+	Limit      int64
+	Remaining  int64
+	ResetAt    time.Time
+	RetryAfter time.Duration
 }
 
 // Status represents the current rate limit status.

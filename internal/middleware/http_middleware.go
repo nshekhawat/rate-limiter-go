@@ -1,3 +1,4 @@
+// Package middleware provides HTTP middleware for rate limiting.
 package middleware
 
 import (
@@ -5,8 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 )
 
 // RateLimitConfig holds configuration for the rate limit middleware.
@@ -172,7 +174,7 @@ func PathBasedRateLimiter(limiter *ratelimiter.RateLimiter, logger *zap.Logger) 
 }
 
 // WhitelistMiddleware creates a middleware that skips rate limiting for certain IPs or headers.
-func WhitelistMiddleware(whitelistedIPs []string, bypassHeaders []string) func(*gin.Context) bool {
+func WhitelistMiddleware(whitelistedIPs, bypassHeaders []string) func(*gin.Context) bool {
 	ipSet := make(map[string]bool)
 	for _, ip := range whitelistedIPs {
 		ipSet[ip] = true

@@ -30,7 +30,7 @@ func setupRedisContainer(t *testing.T) (*RedisStorage, func()) {
 	opts, err := redis.ParseURL(connStr)
 	require.NoError(t, err)
 
-	config := RedisConfig{
+	config := &RedisConfig{
 		Address:      opts.Addr,
 		Password:     opts.Password,
 		DB:           opts.DB,
@@ -291,7 +291,7 @@ func TestRedisStorage_CheckAndConsume_MultipleKeys(t *testing.T) {
 
 func TestRedisStorage_ConnectionFailure(t *testing.T) {
 	// Try to connect to non-existent Redis
-	config := RedisConfig{
+	config := &RedisConfig{
 		Address:     "localhost:59999", // Non-existent port
 		DialTimeout: 100 * time.Millisecond,
 		MaxRetries:  1,
@@ -319,7 +319,7 @@ func BenchmarkRedisStorage_CheckAndConsume(b *testing.B) {
 	connStr, _ := redisContainer.ConnectionString(ctx)
 	opts, _ := redis.ParseURL(connStr)
 
-	config := RedisConfig{
+	config := &RedisConfig{
 		Address:      opts.Addr,
 		PoolSize:     50,
 		MinIdleConns: 10,
@@ -357,7 +357,7 @@ func BenchmarkRedisStorage_CheckAndConsume_Parallel(b *testing.B) {
 	connStr, _ := redisContainer.ConnectionString(ctx)
 	opts, _ := redis.ParseURL(connStr)
 
-	config := RedisConfig{
+	config := &RedisConfig{
 		Address:      opts.Addr,
 		PoolSize:     50,
 		MinIdleConns: 10,

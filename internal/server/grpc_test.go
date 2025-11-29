@@ -53,7 +53,7 @@ func setupGRPCTest(t *testing.T) (pb.RateLimiterServiceClient, healthpb.HealthCl
 	}()
 
 	// Create client
-	conn, err := grpc.Dial(
+	conn, err := grpc.NewClient(
 		listener.Addr().String(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)

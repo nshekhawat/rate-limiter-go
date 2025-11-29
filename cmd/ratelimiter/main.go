@@ -1,3 +1,4 @@
+// Package main provides the entry point for the rate limiter service.
 package main
 
 import (
@@ -8,13 +9,14 @@ import (
 	"syscall"
 	"time"
 
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+
 	"github.com/nshekhawat/rate-limiter-go/internal/config"
 	"github.com/nshekhawat/rate-limiter-go/internal/metrics"
 	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"github.com/nshekhawat/rate-limiter-go/internal/server"
 	"github.com/nshekhawat/rate-limiter-go/internal/storage"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 )
 
 func main() {
@@ -34,7 +36,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "failed to initialize logger: %v\n", err)
 		os.Exit(1)
 	}
-	defer logger.Sync()
+	defer func() { _ = logger.Sync() }()
 
 	logger.Info("starting rate limiter service",
 		zap.String("version", "1.0.0"),
@@ -45,7 +47,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed to initialize storage", zap.Error(err))
 	}
-	defer store.Close()
+	defer func() { _ = store.Close() }()
 
 	// Verify storage connectivity
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -154,7 +156,7 @@ func initStorage(cfg *config.Config, logger *zap.Logger) (storage.AtomicStorage,
 		logger.Info("initializing Redis storage",
 			zap.String("address", cfg.Redis.Address),
 		)
-		redisConfig := storage.RedisConfig{
+		redisConfig := &storage.RedisConfig{
 			Address:      cfg.Redis.Address,
 			Password:     cfg.Redis.Password,
 			DB:           cfg.Redis.DB,

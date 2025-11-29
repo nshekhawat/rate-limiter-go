@@ -389,10 +389,10 @@ func TestRateLimiter_ZeroRefillRate(t *testing.T) {
 
 func TestExtractIPFromRequest(t *testing.T) {
 	tests := []struct {
-		name           string
-		xForwardedFor  string
-		remoteAddr     string
-		expectedIP     string
+		name          string
+		xForwardedFor string
+		remoteAddr    string
+		expectedIP    string
 	}{
 		{
 			name:          "X-Forwarded-For with single IP",

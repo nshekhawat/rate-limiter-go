@@ -1,3 +1,4 @@
+// Package storage provides storage backends for rate limiter state persistence.
 package storage
 
 import "errors"

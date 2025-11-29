@@ -1,3 +1,4 @@
+// Package server provides HTTP and gRPC server implementations for the rate limiter service.
 package server
 
 import (

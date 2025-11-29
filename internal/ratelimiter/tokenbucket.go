@@ -127,7 +127,7 @@ func (tb *TokenBucket) TimeUntilTokens(n int64) time.Duration {
 	return time.Duration(secondsNeeded * float64(time.Second))
 }
 
-// State returns a snapshot of the current bucket state.
+// BucketSnapshot represents a point-in-time snapshot of a token bucket's state.
 type BucketSnapshot struct {
 	Capacity       int64
 	Tokens         float64

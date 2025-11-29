@@ -46,7 +46,7 @@ type RedisStorage struct {
 }
 
 // NewRedisStorage creates a new Redis storage instance.
-func NewRedisStorage(config RedisConfig) (*RedisStorage, error) {
+func NewRedisStorage(config *RedisConfig) (*RedisStorage, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:         config.Address,
 		Password:     config.Password,
@@ -64,13 +64,13 @@ func NewRedisStorage(config RedisConfig) (*RedisStorage, error) {
 	defer cancel()
 
 	if err := client.Ping(ctx).Err(); err != nil {
-		client.Close()
+		_ = client.Close()
 		return nil, fmt.Errorf("failed to connect to Redis: %w", err)
 	}
 
 	return &RedisStorage{
 		client: client,
-		config: config,
+		config: *config,
 	}, nil
 }
 
@@ -216,7 +216,7 @@ return {allowed, tostring(current_tokens), tostring(last_refill_ns)}
 
 // CheckAndConsume atomically checks if tokens are available and consumes them.
 // This uses a Lua script for distributed consistency.
-func (rs *RedisStorage) CheckAndConsume(ctx context.Context, key string, tokens int64, capacity int64, refillRate float64, ttl time.Duration) (*ConsumeResult, error) {
+func (rs *RedisStorage) CheckAndConsume(ctx context.Context, key string, tokens, capacity int64, refillRate float64, ttl time.Duration) (*ConsumeResult, error) {
 	nowNs := time.Now().UnixNano()
 	ttlSeconds := int64(0)
 	if ttl > 0 {
@@ -242,12 +242,16 @@ func (rs *RedisStorage) CheckAndConsume(ctx context.Context, key string, tokens 
 		return nil, fmt.Errorf("unexpected script result length: %d", len(result))
 	}
 
-	allowed := result[0].(int64) == 1
+	allowedVal, ok := result[0].(int64)
+	if !ok {
+		return nil, fmt.Errorf("unexpected type for allowed value")
+	}
+	allowed := allowedVal == 1
 
 	var currentTokens float64
 	switch v := result[1].(type) {
 	case string:
-		fmt.Sscanf(v, "%f", &currentTokens)
+		_, _ = fmt.Sscanf(v, "%f", &currentTokens)
 	case float64:
 		currentTokens = v
 	case int64:
@@ -257,7 +261,7 @@ func (rs *RedisStorage) CheckAndConsume(ctx context.Context, key string, tokens 
 	var lastRefillNs int64
 	switch v := result[2].(type) {
 	case string:
-		fmt.Sscanf(v, "%d", &lastRefillNs)
+		_, _ = fmt.Sscanf(v, "%d", &lastRefillNs)
 	case int64:
 		lastRefillNs = v
 	}
