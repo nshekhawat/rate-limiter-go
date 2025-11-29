@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 permissions:
   contents: write
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: "1.25"
 
       - name: Run tests
         run: go test -race ./...
@@ -34,41 +34,41 @@ jobs:
           # Linux
           - goos: linux
             goarch: amd64
-            suffix: ''
+            suffix: ""
           - goos: linux
             goarch: arm64
-            suffix: ''
+            suffix: ""
           - goos: linux
-            goarch: '386'
-            suffix: ''
+            goarch: "386"
+            suffix: ""
           - goos: linux
             goarch: arm
-            goarm: '7'
-            suffix: ''
+            goarm: "7"
+            suffix: ""
           # macOS
           - goos: darwin
             goarch: amd64
-            suffix: ''
+            suffix: ""
           - goos: darwin
             goarch: arm64
-            suffix: ''
+            suffix: ""
           # Windows
           - goos: windows
             goarch: amd64
-            suffix: '.exe'
+            suffix: ".exe"
           - goos: windows
             goarch: arm64
-            suffix: '.exe'
+            suffix: ".exe"
           - goos: windows
-            goarch: '386'
-            suffix: '.exe'
+            goarch: "386"
+            suffix: ".exe"
           # FreeBSD
           - goos: freebsd
             goarch: amd64
-            suffix: ''
+            suffix: ""
           - goos: freebsd
             goarch: arm64
-            suffix: ''
+            suffix: ""
 
     steps:
       - name: Checkout code
@@ -79,7 +79,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: "1.25"
 
       - name: Get version
         id: version
