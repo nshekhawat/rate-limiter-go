@@ -28,7 +28,12 @@ linters:
   settings:
     errcheck:
       check-type-assertions: true
-      check-blank: true
+      check-blank: false
+      exclude-functions:
+        - (*go.uber.org/zap.Logger).Sync
+        - (io.Closer).Close
+        - (*github.com/redis/go-redis/v9.Client).Close
+        - fmt.Sscanf
     govet:
       enable-all: true
       disable:

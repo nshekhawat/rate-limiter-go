@@ -6,10 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 func newTestRateLimiter(t *testing.T) (*RateLimiter, func()) {

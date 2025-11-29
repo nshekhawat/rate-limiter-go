@@ -9,12 +9,13 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
 )
 
 // Mock gRPC server for testing

@@ -8,10 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 func newTestHTTPServer(t *testing.T) (*HTTPServer, func()) {

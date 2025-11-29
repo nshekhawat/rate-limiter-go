@@ -8,9 +8,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 )
 
 // HTTPServer represents the HTTP API server.

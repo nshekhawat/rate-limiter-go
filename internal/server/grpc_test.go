@@ -6,9 +6,6 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
@@ -16,6 +13,10 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/status"
+
+	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 func setupGRPCTest(t *testing.T) (pb.RateLimiterServiceClient, healthpb.HealthClient, func()) {

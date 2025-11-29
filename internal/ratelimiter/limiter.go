@@ -8,8 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 // Rule defines a rate limiting rule.
