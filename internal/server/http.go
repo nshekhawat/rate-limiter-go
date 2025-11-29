@@ -8,18 +8,19 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 )
 
 // HTTPServer represents the HTTP API server.
 type HTTPServer struct {
-	engine     *gin.Engine
-	server     *http.Server
-	limiter    *ratelimiter.RateLimiter
-	logger     *zap.Logger
-	config     *HTTPConfig
+	engine  *gin.Engine
+	server  *http.Server
+	limiter *ratelimiter.RateLimiter
+	logger  *zap.Logger
+	config  *HTTPConfig
 }
 
 // HTTPConfig holds HTTP server configuration.
@@ -91,11 +92,9 @@ func (s *HTTPServer) setupRoutes() {
 
 	// API v1 routes
 	v1 := s.engine.Group("/v1")
-	{
-		v1.POST("/check", s.checkHandler)
-		v1.GET("/status/:key", s.statusHandler)
-		v1.DELETE("/reset/:key", s.resetHandler)
-	}
+	v1.POST("/check", s.checkHandler)
+	v1.GET("/status/:key", s.statusHandler)
+	v1.DELETE("/reset/:key", s.resetHandler)
 }
 
 // setupServer creates the HTTP server.
@@ -174,11 +173,11 @@ type CheckRequest struct {
 
 // CheckResponse represents a rate limit check response.
 type CheckResponse struct {
-	Allowed           bool   `json:"allowed"`
-	Limit             int64  `json:"limit"`
-	Remaining         int64  `json:"remaining"`
-	RetryAfterSeconds int64  `json:"retry_after_seconds,omitempty"`
-	ResetAtUnix       int64  `json:"reset_at_unix"`
+	Allowed           bool  `json:"allowed"`
+	Limit             int64 `json:"limit"`
+	Remaining         int64 `json:"remaining"`
+	RetryAfterSeconds int64 `json:"retry_after_seconds,omitempty"`
+	ResetAtUnix       int64 `json:"reset_at_unix"`
 }
 
 func (s *HTTPServer) checkHandler(c *gin.Context) {

@@ -1,3 +1,4 @@
+// Package config provides configuration management for the rate limiter service.
 package config
 
 import (
@@ -5,8 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"github.com/spf13/viper"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 )
 
 // Config holds the complete application configuration.
@@ -42,12 +44,12 @@ type RedisConfig struct {
 
 // RateLimitConfig holds rate limiting configuration.
 type RateLimitConfig struct {
-	KeyPrefix     string                       `mapstructure:"key_prefix"`
-	EnableBypass  bool                         `mapstructure:"enable_bypass"`
-	BypassHeaders []string                     `mapstructure:"bypass_headers"`
-	DefaultRules  []ratelimiter.Rule           `mapstructure:"default_rules"`
-	CustomRules   map[string]ratelimiter.Rule  `mapstructure:"custom_rules"`
-	TTL           time.Duration                `mapstructure:"ttl"`
+	KeyPrefix     string                      `mapstructure:"key_prefix"`
+	EnableBypass  bool                        `mapstructure:"enable_bypass"`
+	BypassHeaders []string                    `mapstructure:"bypass_headers"`
+	DefaultRules  []ratelimiter.Rule          `mapstructure:"default_rules"`
+	CustomRules   map[string]ratelimiter.Rule `mapstructure:"custom_rules"`
+	TTL           time.Duration               `mapstructure:"ttl"`
 }
 
 // MetricsConfig holds metrics configuration.
@@ -221,10 +223,10 @@ func (c *Config) Validate() error {
 
 	// Validate Redis config
 	if c.Redis.Address == "" {
-		return fmt.Errorf("Redis address is required")
+		return fmt.Errorf("redis address is required")
 	}
 	if c.Redis.PoolSize < 1 {
-		return fmt.Errorf("Redis pool size must be at least 1")
+		return fmt.Errorf("redis pool size must be at least 1")
 	}
 
 	// Validate rate limit config

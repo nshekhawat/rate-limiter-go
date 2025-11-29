@@ -43,7 +43,7 @@ type AtomicStorage interface {
 	// CheckAndConsume atomically checks if tokens are available and consumes them.
 	// Returns the decision (allowed, remaining tokens, etc.) and any error.
 	// This is the key operation for distributed rate limiting.
-	CheckAndConsume(ctx context.Context, key string, tokens int64, capacity int64, refillRate float64, ttl time.Duration) (*ConsumeResult, error)
+	CheckAndConsume(ctx context.Context, key string, tokens, capacity int64, refillRate float64, ttl time.Duration) (*ConsumeResult, error)
 }
 
 // ConsumeResult represents the result of an atomic check-and-consume operation.

@@ -1,3 +1,4 @@
+// Package ratelimiter provides the core rate limiting logic using the token bucket algorithm.
 package ratelimiter
 
 import (
@@ -7,8 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 // Rule defines a rate limiting rule.
@@ -114,13 +116,13 @@ func (rl *RateLimiter) Allow(ctx context.Context, identifier string) (*Decision,
 }
 
 // AllowN checks if n tokens can be consumed for the given identifier and resource.
-func (rl *RateLimiter) AllowN(ctx context.Context, identifier string, resource string, tokens int64) (*Decision, error) {
+func (rl *RateLimiter) AllowN(ctx context.Context, identifier, resource string, tokens int64) (*Decision, error) {
 	rule := rl.getRule(resource)
 	return rl.AllowWithRule(ctx, identifier, resource, tokens, rule)
 }
 
 // AllowWithRule checks rate limit using a specific rule.
-func (rl *RateLimiter) AllowWithRule(ctx context.Context, identifier string, resource string, tokens int64, rule *Rule) (*Decision, error) {
+func (rl *RateLimiter) AllowWithRule(ctx context.Context, identifier, resource string, tokens int64, rule *Rule) (*Decision, error) {
 	if rule == nil {
 		rule = rl.config.DefaultRule
 	}
@@ -176,7 +178,7 @@ func (rl *RateLimiter) AllowWithRule(ctx context.Context, identifier string, res
 }
 
 // GetLimitInfo returns the current rate limit status for an identifier.
-func (rl *RateLimiter) GetLimitInfo(ctx context.Context, identifier string, resource string) (*LimitInfo, error) {
+func (rl *RateLimiter) GetLimitInfo(ctx context.Context, identifier, resource string) (*LimitInfo, error) {
 	rule := rl.getRule(resource)
 	key := rl.keyExtractor(ctx, identifier, resource)
 
@@ -221,7 +223,7 @@ func (rl *RateLimiter) GetLimitInfo(ctx context.Context, identifier string, reso
 }
 
 // ResetLimit resets the rate limit for an identifier.
-func (rl *RateLimiter) ResetLimit(ctx context.Context, identifier string, resource string) error {
+func (rl *RateLimiter) ResetLimit(ctx context.Context, identifier, resource string) error {
 	key := rl.keyExtractor(ctx, identifier, resource)
 
 	err := rl.storage.Delete(ctx, key)
@@ -254,7 +256,7 @@ func (rl *RateLimiter) GetConfig() *Config {
 // Helper functions for key extraction
 
 // ExtractIPFromRequest extracts the client IP from X-Forwarded-For or RemoteAddr.
-func ExtractIPFromRequest(xForwardedFor string, remoteAddr string) string {
+func ExtractIPFromRequest(xForwardedFor, remoteAddr string) string {
 	// Try X-Forwarded-For first
 	if xForwardedFor != "" {
 		// X-Forwarded-For can contain multiple IPs, take the first one (original client)

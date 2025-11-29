@@ -1,3 +1,4 @@
+// Package server provides HTTP and gRPC server implementations for the rate limiter service.
 package server
 
 import (
@@ -5,8 +6,6 @@ import (
 	"fmt"
 	"net"
 
-	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -14,6 +13,9 @@ import (
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
+
+	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 )
 
 // GRPCServer represents the gRPC API server.

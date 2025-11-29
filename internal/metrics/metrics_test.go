@@ -6,10 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 func newTestMetrics() *Metrics {

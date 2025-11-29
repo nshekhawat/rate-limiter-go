@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
-	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	pb "github.com/nshekhawat/rate-limiter-go/api/proto"
 )
 
 // GRPCClient is a gRPC-based rate limiter client.

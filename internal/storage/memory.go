@@ -44,7 +44,7 @@ func NewMemoryStorage(cleanupInterval time.Duration) *MemoryStorage {
 // getLock returns the mutex for a given key, creating one if it doesn't exist.
 func (ms *MemoryStorage) getLock(key string) *sync.Mutex {
 	lock, _ := ms.locks.LoadOrStore(key, &sync.Mutex{})
-	return lock.(*sync.Mutex)
+	return lock.(*sync.Mutex) //nolint:errcheck // type assertion is safe here
 }
 
 // cleanupLoop periodically removes expired entries.
@@ -63,7 +63,10 @@ func (ms *MemoryStorage) cleanupLoop() {
 func (ms *MemoryStorage) cleanup() {
 	now := time.Now()
 	ms.data.Range(func(key, value interface{}) bool {
-		entry := value.(*memoryEntry)
+		entry, ok := value.(*memoryEntry)
+		if !ok {
+			return true
+		}
 		entry.mu.Lock()
 		expired := !entry.expiresAt.IsZero() && now.After(entry.expiresAt)
 		entry.mu.Unlock()
@@ -85,7 +88,10 @@ func (ms *MemoryStorage) Get(ctx context.Context, key string) (*BucketState, err
 		return nil, nil
 	}
 
-	entry := value.(*memoryEntry)
+	entry, ok := value.(*memoryEntry)
+	if !ok {
+		return nil, nil
+	}
 	entry.mu.Lock()
 	defer entry.mu.Unlock()
 
@@ -163,7 +169,7 @@ func (ms *MemoryStorage) Ping(ctx context.Context) error {
 
 // CheckAndConsume atomically checks if tokens are available and consumes them.
 // For in-memory storage, this uses per-key locks for atomicity.
-func (ms *MemoryStorage) CheckAndConsume(ctx context.Context, key string, tokens int64, capacity int64, refillRate float64, ttl time.Duration) (*ConsumeResult, error) {
+func (ms *MemoryStorage) CheckAndConsume(ctx context.Context, key string, tokens, capacity int64, refillRate float64, ttl time.Duration) (*ConsumeResult, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -182,14 +188,19 @@ func (ms *MemoryStorage) CheckAndConsume(ctx context.Context, key string, tokens
 	value, loaded := ms.data.Load(key)
 
 	if loaded {
-		entry = value.(*memoryEntry)
-		// Check if expired
-		if !entry.expiresAt.IsZero() && now.After(entry.expiresAt) {
+		var ok bool
+		entry, ok = value.(*memoryEntry)
+		if !ok {
 			loaded = false
 		} else {
-			// Work with a copy of the state
-			stateCopy := *entry.state
-			state = &stateCopy
+			// Check if expired
+			if !entry.expiresAt.IsZero() && now.After(entry.expiresAt) {
+				loaded = false
+			} else {
+				// Work with a copy of the state
+				stateCopy := *entry.state
+				state = &stateCopy
+			}
 		}
 	}
 

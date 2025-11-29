@@ -105,7 +105,7 @@ func (c *HTTPClient) Check(ctx context.Context, identifier string, opts ...Check
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -146,7 +146,7 @@ func (c *HTTPClient) GetStatus(ctx context.Context, identifier string, opts ...S
 		urlPath += "?resource=" + url.QueryEscape(options.resource)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", urlPath, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", urlPath, http.NoBody)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -155,7 +155,7 @@ func (c *HTTPClient) GetStatus(ctx context.Context, identifier string, opts ...S
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -195,7 +195,7 @@ func (c *HTTPClient) Reset(ctx context.Context, identifier string, opts ...Reset
 		urlPath += "?resource=" + url.QueryEscape(options.resource)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "DELETE", urlPath, nil)
+	req, err := http.NewRequestWithContext(ctx, "DELETE", urlPath, http.NoBody)
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
@@ -204,7 +204,7 @@ func (c *HTTPClient) Reset(ctx context.Context, identifier string, opts ...Reset
 	if err != nil {
 		return fmt.Errorf("request failed: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {

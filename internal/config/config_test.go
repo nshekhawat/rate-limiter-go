@@ -6,10 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/ratelimiter"
 )
 
 func TestDefaultConfig(t *testing.T) {
@@ -98,7 +99,7 @@ func TestConfig_Validate(t *testing.T) {
 				c.Redis.Address = ""
 			},
 			expectError: true,
-			errorMsg:    "Redis address is required",
+			errorMsg:    "redis address is required",
 		},
 		{
 			name: "invalid Redis pool size",
@@ -106,7 +107,7 @@ func TestConfig_Validate(t *testing.T) {
 				c.Redis.PoolSize = 0
 			},
 			expectError: true,
-			errorMsg:    "Redis pool size must be at least 1",
+			errorMsg:    "redis pool size must be at least 1",
 		},
 		{
 			name: "empty key prefix",

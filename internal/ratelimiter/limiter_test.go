@@ -6,10 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
+
+	"github.com/nshekhawat/rate-limiter-go/internal/storage"
 )
 
 func newTestRateLimiter(t *testing.T) (*RateLimiter, func()) {
@@ -389,10 +390,10 @@ func TestRateLimiter_ZeroRefillRate(t *testing.T) {
 
 func TestExtractIPFromRequest(t *testing.T) {
 	tests := []struct {
-		name           string
-		xForwardedFor  string
-		remoteAddr     string
-		expectedIP     string
+		name          string
+		xForwardedFor string
+		remoteAddr    string
+		expectedIP    string
 	}{
 		{
 			name:          "X-Forwarded-For with single IP",
