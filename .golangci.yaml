@@ -20,69 +20,59 @@ linters:
     - gocritic
     - revive
     - gosec
-
-linters-settings:
-  errcheck:
-    check-type-assertions: true
-    check-blank: true
-
-  govet:
-    enable-all: true
-    disable:
-      - fieldalignment
-
-  gofmt:
-    simplify: true
-
-  goimports:
-    local-prefixes:
-      - github.com/nshekhawat/rate-limiter-go
-
-  misspell:
-    locale: US
-
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-      - performance
-
-  revive:
-    rules:
-      - name: blank-imports
-      - name: context-as-argument
-      - name: context-keys-type
-      - name: dot-imports
-      - name: error-return
-      - name: error-strings
-      - name: error-naming
-      - name: exported
-      - name: increment-decrement
-      - name: var-naming
-      - name: var-declaration
-      - name: package-comments
-      - name: range
-      - name: receiver-naming
-      - name: time-naming
-      - name: unexported-return
-      - name: indent-error-flow
-      - name: errorf
-
-  gosec:
-    excludes:
-      - G104
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+    gofmt:
+      simplify: true
+    goimports:
+      local-prefixes:
+        - github.com/nshekhawat/rate-limiter-go
+    misspell:
+      locale: US
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+    revive:
+      rules:
+        - name: blank-imports
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: dot-imports
+        - name: error-return
+        - name: error-strings
+        - name: error-naming
+        - name: exported
+        - name: increment-decrement
+        - name: var-naming
+        - name: var-declaration
+        - name: package-comments
+        - name: range
+        - name: receiver-naming
+        - name: time-naming
+        - name: unexported-return
+        - name: indent-error-flow
+        - name: errorf
+    gosec:
+      excludes:
+        - G104
 
 issues:
-  exclude-rules:
+  max-issues-per-linter: 50
+  max-same-issues: 10
+  exclude:
     - path: _test\.go
       linters:
         - gosec
         - gocritic
         - errcheck
-
     - path: \.pb\.go
       linters:
         - all
-
-  max-issues-per-linter: 50
-  max-same-issues: 10
