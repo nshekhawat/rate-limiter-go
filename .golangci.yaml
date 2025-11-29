@@ -1,8 +1,11 @@
+version: "2"
+
 run:
   timeout: 5m
   modules-download-mode: readonly
 
 linters:
+  default: none
   enable:
     - errcheck
     - gosimple
@@ -17,7 +20,6 @@ linters:
     - gocritic
     - revive
     - gosec
-    - exportloopref
 
 linters-settings:
   errcheck:
@@ -33,7 +35,8 @@ linters-settings:
     simplify: true
 
   goimports:
-    local-prefixes: github.com/nshekhawat/rate-limiter-go
+    local-prefixes:
+      - github.com/nshekhawat/rate-limiter-go
 
   misspell:
     locale: US
@@ -67,18 +70,16 @@ linters-settings:
 
   gosec:
     excludes:
-      - G104  # Audit errors not checked (covered by errcheck)
+      - G104
 
 issues:
   exclude-rules:
-    # Exclude some linters from running on tests files
     - path: _test\.go
       linters:
         - gosec
         - gocritic
         - errcheck
 
-    # Exclude generated protobuf files
     - path: \.pb\.go
       linters:
         - all
