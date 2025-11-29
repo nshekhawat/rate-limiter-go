@@ -146,7 +146,13 @@ jobs:
           if [ -n "$PREV_TAG" ]; then
             CHANGELOG=$(git log --pretty=format:"- %s (%h)" ${PREV_TAG}..HEAD)
           else
-            CHANGELOG=$(git log --pretty=format:"- %s (%h)" HEAD~10..HEAD)
+            # For first release, get last 10 commits or all if less than 10
+            COMMIT_COUNT=$(git rev-list --count HEAD)
+            if [ $COMMIT_COUNT -le 10 ]; then
+              CHANGELOG=$(git log --pretty=format:"- %s (%h)" HEAD)
+            else
+              CHANGELOG=$(git log --pretty=format:"- %s (%h)" HEAD~10..HEAD)
+            fi
           fi
           echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
