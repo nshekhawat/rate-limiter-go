@@ -1,0 +1,33 @@
+# Rate Limiter Configuration Example
+# Copy this file to config.yaml and adjust values as needed
+
+server:
+  http_port: 8080
+  grpc_port: 9090
+  read_timeout: 10s
+  write_timeout: 10s
+
+redis:
+  enabled: false  # Set to true to use Redis backend
+  address: "localhost:6379"
+  password: ""
+  db: 0
+  pool_size: 10
+  min_idle_conns: 5
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+
+rate_limit:
+  key_prefix: "rl:"
+  default_limit: 100       # Requests per window
+  default_window: 60s      # Window duration
+  ttl: 1h                  # Key expiration time
+
+metrics:
+  enabled: true
+  path: "/metrics"
+
+logging:
+  level: "info"    # debug, info, warn, error
+  format: "json"   # json, console

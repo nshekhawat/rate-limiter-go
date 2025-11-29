@@ -1,0 +1,54 @@
+# Rate Limiter Configuration Example
+# Copy this file to config.yaml and modify as needed
+
+server:
+  http_port: 8080
+  grpc_port: 9090
+  read_timeout: 10s
+  write_timeout: 10s
+  shutdown_timeout: 30s
+
+redis:
+  address: "localhost:6379"
+  password: ""
+  db: 0
+  pool_size: 10
+  min_idle_conns: 5
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+  max_retries: 3
+
+ratelimit:
+  key_prefix: "ratelimit:"
+  enable_bypass: false
+  bypass_headers:
+    - "X-Bypass-RateLimit"
+  default_rules:
+    - name: "default"
+      capacity: 100
+      refill_rate: 10.0
+      period: 1m
+      burst_size: 20
+  custom_rules:
+    api_heavy:
+      name: "api_heavy"
+      capacity: 10
+      refill_rate: 1.0
+      period: 1m
+      burst_size: 5
+    api_light:
+      name: "api_light"
+      capacity: 1000
+      refill_rate: 100.0
+      period: 1m
+      burst_size: 200
+
+metrics:
+  enabled: true
+  path: "/metrics"
+
+logging:
+  level: "info"
+  format: "json"
+  output: "stdout"
